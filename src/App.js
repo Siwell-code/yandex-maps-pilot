@@ -13,11 +13,11 @@ function App() {
   const [selectedPoint, setSelectedPoint] = useState(null); 
   const apiLoaded = useRef(false);
 
-  // 🔐 БЕРЁМ КЛЮЧИ ИЗ ПЕРЕМЕННЫХ ОКРУЖЕНИЯ
+  
   const GEOCODER_API_KEY = process.env.REACT_APP_YANDEX_GEOCODER_API_KEY;
   const MAPS_API_KEY = process.env.REACT_APP_YANDEX_MAPS_API_KEY;
 
-  // Проверка наличия ключей
+  
   if (!GEOCODER_API_KEY || !MAPS_API_KEY) {
     console.error('❌ Ошибка: API-ключи не найдены! Проверьте файл .env');
   }
@@ -53,7 +53,7 @@ function App() {
     const dot = document.createElement('div');
     dot.style.width = '14px';
     dot.style.height = '14px';
-    dot.style.background = '#2196F3';
+    dot.style.background = '#174971';
     dot.style.borderRadius = '50%';
     dot.style.border = '2px solid white';
     dot.style.boxShadow = '0 2px 8px rgba(33, 150, 243, 0.4)';
@@ -189,7 +189,7 @@ function App() {
     }
   }, [points]);
 
-  // Загрузка адресов при старте
+  
   useEffect(() => {
     loadPoints();
   }, [loadPoints]);
@@ -250,59 +250,66 @@ function App() {
   }, [isMapReady, points, createMap]);
 
   return (
-    <div className="App">
-      <h1>Яндекс Карты — Диаграммы на точках</h1>
-      
-      {loading && (
-        <div style={{ margin: '10px 0', padding: '10px', background: '#e3f2fd', borderRadius: '4px' }}>
-          <p style={{ margin: 0 }}>
-            ⏳ Загрузка адресов: {progress.current} из {progress.total}
-          </p>
-          <div style={{ 
-            width: '100%', 
-            height: '6px', 
-            background: '#bbdefb', 
-            borderRadius: '3px',
-            marginTop: '8px'
-          }}>
-            <div style={{ 
-              width: `${(progress.current / progress.total) * 100}%`, 
-              height: '100%', 
-              background: '#1976d2', 
-              borderRadius: '3px',
-              transition: 'width 0.3s ease'
-            }} />
-          </div>
-        </div>
-      )}
+  <div className="App">
+    {/* Шапка */}
+    <header className="header">
+      <h1>🗺️ Яндекс Карты <span>+ Степень защищенности объектов</span></h1>
+      <div className="header-badge">
+        <span className="dot"></span>
+        {loading ? 'Загрузка...' : `${points.length} точек`}
+      </div>
+    </header>
 
-      <p style={{ color: '#666', fontSize: '14px' }}>
-        🔵 Наведите на точку — анимация. Нажмите — откроется диаграмма.
-      </p>
-      
+    {/* Прогресс-бар */}
+    {loading && (
+      <div className="loading-bar">
+        <div className="info">
+          <div className="spinner"></div>
+          <span>Загрузка адресов: {progress.current} из {progress.total}</span>
+        </div>
+        <div className="progress-track">
+          <div
+            className="progress-fill"
+            style={{ width: `${(progress.current / progress.total) * 100}%` }}
+          />
+        </div>
+      </div>
+    )}
+
+    {/* Карта */}
+    <div className="map-wrapper">
       <div
         ref={mapRef}
-        style={{
-          width: '100%',
-          height: '70vh',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          background: '#f0f0f0',
-        }}
+        className="map-container"
       />
-
-      {selectedPoint && (
-        <ChartPopup
-          data={{
-            title: selectedPoint.name,
-            values: selectedPoint.values,
-            address: selectedPoint.address,
-          }}
-          onClose={() => setSelectedPoint(null)}
-        />
-      )}
     </div>
-  );
+
+    {/* Подсказка */}
+    <div className="hint">
+      <span className="hint-item">
+        <span className="icon"></span> Наведите 
+      </span>
+      <span className="hint-item">
+        <span className="icon"></span> Кликните 
+      </span>
+      <span className="hint-item">
+        <span className="icon"></span> 
+      </span>
+    </div>
+
+    {/* Попап */}
+    {selectedPoint && (
+      <ChartPopup
+        data={{
+          title: selectedPoint.name,
+          values: selectedPoint.values,
+          address: selectedPoint.address,
+        }}
+        onClose={() => setSelectedPoint(null)}
+      />
+    )}
+  </div>
+);
 }
 
 export default App;
