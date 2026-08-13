@@ -1,6 +1,7 @@
 {
   "name": "yandex-maps-pilot",
   "version": "0.1.0",
+  "homepage": "https://siwell-code.github.io/yandex-maps-pilot",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
