@@ -199,7 +199,7 @@ function App() {
   return (
     <div className={styles.app}>
       <header className={styles.header}>
-        <h1> Яндекс Карты <span>& Паказатели защищенности</span></h1>
+        <h1> Яндекс Карты <span>& Показатели защищенности</span></h1>
         <div className={styles.headerBadge}>
           <span className={styles.dot}></span>
           {points.length} объектов
